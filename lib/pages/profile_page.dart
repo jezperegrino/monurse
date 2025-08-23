@@ -1,40 +1,8 @@
-// import 'package:flutter/material.dart';
-
-
-// class ProfilePage extends StatelessWidget {
-//   const ProfilePage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Profile'),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             CircleAvatar(
-//               radius: 50,
-//               backgroundImage: AssetImage('https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D'), // Placeholder image
-//             ),
-//             SizedBox(height: 20),
-//             Text(
-//               'User Name',
-//               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-//             ),
-//             SizedBox(height: 10),
-//             Text('Bio or description goes here.'),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
 import 'package:flutter/material.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/appkit_global.dart';
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -65,28 +33,65 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text('Profile'),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0), // General padding
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start, // Align content to the start (left)
           children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(
-                'https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
-              ), // Using NetworkImage for the URL
+            Center( // Center the entire section horizontally
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.account_circle,
+                    size: 100,
+                    color: Colors.grey[700],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'User Name',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20), // Space between sections
+            if (AppKitGlobal.appKitModal != null) // Check if initialized
+              AppKitModalNetworkSelectButton(
+                appKit: AppKitGlobal.appKitModal!,
+                context: context,
+                custom: Container(
+                  width: 200,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Color(0xFF8fb9ad),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Select Network',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Text(
+                  'Network selector not available yet.',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ),
+            SizedBox(height: 20),
+            Text(
+              'Role: $userRole',
+              style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
             ),
             SizedBox(height: 20),
             Text(
-              'User Name',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Bio or description goes here.',
+              style: TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 10),
-            Text(
-              'Role: $userRole', // Display the role under User Name
-              style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
-            ),
-            SizedBox(height: 10),
-            Text('Bio or description goes here.'),
           ],
         ),
       ),
