@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+// import 'package:reown_appkit/modal/reown_appkit_modal.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'models/appkit_global.dart';
 import 'pages/chat_page.dart';
 import 'pages/home_page.dart';
 import 'pages/likes_page.dart';
