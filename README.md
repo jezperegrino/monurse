@@ -1,5 +1,5 @@
-# monurse
+# Monurse
 
-A new Flutter project for monad hackathon :D
+A new Flutter project for Monad hackathon :D 🔥🔥
 
 

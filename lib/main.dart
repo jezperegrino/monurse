@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:reown_appkit/reown_appkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/chat_page.dart';
 import 'pages/home_page.dart';
 import 'pages/likes_page.dart';
@@ -32,7 +34,21 @@ class HomeScreen extends StatefulWidget {
 
 
 class _HomeScreenState extends State<HomeScreen> {
+  String? userRole;
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserRole();
+  }
+
+  Future<void> _loadUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userRole = prefs.getString('userRole') ?? 'Not Selected';
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
