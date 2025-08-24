@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/appkit_global.dart';
+import 'profile_form_screen.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -15,18 +16,49 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   String? userRole = 'Not Selected';
+  String userName = 'User Name'; // State for dynamic username
+  List<String> profileData = []; // To store additional data below bio
 
   @override
   void initState() {
     super.initState();
     _loadUserRole();
+    _loadProfileData(); // Load saved data
   }
 
   Future<void> _loadUserRole() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       userRole = prefs.getString('userRole') ?? 'Not Selected';
+      userName = prefs.getString('userName') ?? 'User Name'; // Load username
     });
+  }
+
+  Future<void> _loadProfileData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      profileData = prefs.getStringList('profileData') ?? [];
+    });
+  }
+
+  Future<void> _saveProfileData(Map<String, dynamic> formData) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (formData.containsKey('name')) {
+      setState(() {
+        userName = formData['name'];
+      });
+      await prefs.setString('userName', formData['name']);
+    }
+    final updatedData = [...profileData, _formatProfileData(formData)];
+    setState(() {
+      profileData = updatedData;
+    });
+    await prefs.setStringList('profileData', updatedData);
+  }
+
+  String _formatProfileData(Map<String, dynamic> data) {
+    final entries = data.entries.where((e) => e.key != 'name'); // Exclude name (handled separately)
+    return entries.map((e) => '${e.key}: ${e.value}').join(', ');
   }
 
   @override
@@ -50,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'User Name',
+                    userName, // Updated to dynamic username
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   // Conditionally display ranking if role is Care Provider
@@ -110,6 +142,48 @@ class _ProfilePageState extends State<ProfilePage> {
             Text(
               'Bio or description goes here.',
               style: TextStyle(fontSize: 16),
+            ),
+            // Display saved profile data
+            if (profileData.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: profileData.map((data) => Text(data, style: TextStyle(fontSize: 16))).toList(),
+                ),
+              ),
+            // New button at the bottom
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileFormScreen(
+                            userRole: userRole!,
+                            onSave: _saveProfileData,
+                          ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF8fb9ad),
+                      minimumSize: Size(200, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      'Editar Perfil',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

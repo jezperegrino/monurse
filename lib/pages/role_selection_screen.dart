@@ -37,7 +37,6 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
       MaterialPageRoute(builder: (context) => HomeScreen(loginContext: context)),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,9 +47,9 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
           children: [
             // Title
             Text(
-              'Determine Your Role',
+              'Determina tu Rol!',
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 35,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF8fb9ad),
               ),
@@ -58,55 +57,75 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
             ),
             SizedBox(height: 40),
             // Care Provider Button
-            ElevatedButton(
-              onPressed: () => _navigateToHome('Care Provider'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(200, 100), // Large button size
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+            Column(
+              children: [
+                Text(
+                  'Regístrate para promocionar tus servicios como cuidador',
+                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.local_hospital, // Stethoscope-like icon (use local_hospital as a proxy)
-                    size: 60,
-                    color: Color(0xFF8fb9ad),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () => _navigateToHome('Care Provider'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(200, 100), // Large button size
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Care Provider',
-                    style: TextStyle(fontSize: 20, color: Color(0xFF8fb9ad)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.local_hospital, // Stethoscope-like icon (use local_hospital as a proxy)
+                        size: 60,
+                        color: Color(0xFF8fb9ad),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Care Provider',
+                        style: TextStyle(fontSize: 20, color: Color(0xFF8fb9ad)),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             SizedBox(height: 45),
             // Care Seeker Button
-            ElevatedButton(
-              onPressed: () => _navigateToHome('Care Seeker'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(200, 100), // Large button size
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+            Column(
+              children: [
+                Text(
+                  'Busca el mejor cuidador para tu paciente',
+                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.baby_changing_station, // Home health icon
-                    size: 60,
-                    color: Color(0xFF8fb9ad),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () => _navigateToHome('Care Seeker'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(200, 100), // Large button size
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Care Seeker',
-                    style: TextStyle(fontSize: 20, color: Color(0xFF8fb9ad)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.baby_changing_station, // Home health icon
+                        size: 60,
+                        color: Color(0xFF8fb9ad),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Care Seeker',
+                        style: TextStyle(fontSize: 20, color: Color(0xFF8fb9ad)),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

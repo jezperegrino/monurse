@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final screens = [
       HomePage(appKitModal: _appKitModal, context: widget.loginContext),
-      LikesPage(appKitModal: _appKitModal, context: widget.loginContext),
+      LikesPage(appKitModal: _appKitModal, context: widget.loginContext, userRole: userRole),
       // ChatPage(appKitModal: _appKitModal, context: widget.loginContext),
       ProfilePage(appKitModal: _appKitModal, context: widget.loginContext),
     ];
@@ -123,8 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Solicitudes'),
-          BottomNavigationBarItem(icon: Icon(Icons.account_box), label: 'Cuidador'),
+          BottomNavigationBarItem(icon: Icon(Icons.health_and_safety), label: 'Propuestas'),
+          BottomNavigationBarItem(icon: Icon(Icons.account_box), label: userRole == 'care seeker' ? 'Mi paciente' : 'Mis solicitudes'),
           // BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
         ],
