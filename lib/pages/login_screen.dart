@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'role_selection_screen.dart'; // Import the role selection screen
+import 'role_selection_screen.dart';
 import '../main.dart';
 import '../models/appkit_global.dart';
 
@@ -22,17 +22,17 @@ class _LoginScreenState extends State<LoginScreen> {
     ReownAppKitModalNetworks.removeSupportedNetworks('solana');
 
 
-    ReownAppKitModalNetworks.addSupportedNetworks('monad', [
-      ReownAppKitModalNetworkInfo(
-        name: 'Monad Testnet',
-        chainId: '10143',
-        chainIcon: 'https://files.svgcdn.io/token-branded/monad.png',
-        currency: 'MON',
-        rpcUrl: 'https://testnet-rpc.monad.xyz',
-        explorerUrl: 'https://testnet.monadexplorer.com',
-        isTestNetwork: true,
-      ),
-    ]);
+    // ReownAppKitModalNetworks.addSupportedNetworks('monad', [
+    //   ReownAppKitModalNetworkInfo(
+    //     name: 'Monad Testnet',
+    //     chainId: '10143',
+    //     chainIcon: 'https://files.svgcdn.io/token-branded/monad.png',
+    //     currency: 'MON',
+    //     rpcUrl: 'https://testnet-rpc.monad.xyz',
+    //     explorerUrl: 'https://testnet.monadexplorer.com',
+    //     isTestNetwork: true,
+    //   ),
+    // ]);
 
     _appKitModal = ReownAppKitModal(
       context: context,
@@ -47,6 +47,17 @@ class _LoginScreenState extends State<LoginScreen> {
           universal: 'https://reown.com/exampleapp',
         ),
       ),
+      featuresConfig: FeaturesConfig(
+        socials: [
+          AppKitSocialOption.Email,
+          AppKitSocialOption.X,
+          AppKitSocialOption.Google,
+          AppKitSocialOption.Apple,
+          AppKitSocialOption.Facebook,
+          AppKitSocialOption.Telegram,
+        ],
+        showMainWallets: false, // OPTIONAL - true by default
+      ),
       optionalNamespaces: {
         'eip155': RequiredNamespace.fromJson({
           'chains': ReownAppKitModalNetworks.getAllSupportedNetworks(
@@ -57,16 +68,20 @@ class _LoginScreenState extends State<LoginScreen> {
           'events':
               NetworkUtils.defaultNetworkEvents['eip155']!.toList(),
         }),
+        // 'solana': RequiredNamespace.fromJson({
+        //   'chains': ReownAppKitModalNetworks.getAllSupportedNetworks(
+        //     namespace: 'solana',
+        //   ).map((chain) => '${chain.chainId}').toList(),
+        //   'methods':
+        //       NetworkUtils.defaultNetworkMethods['solana']!.toList(),
+        //   'events': [],
+        // }),
         'monad': RequiredNamespace.fromJson({
           'chains': ReownAppKitModalNetworks.getAllSupportedNetworks(
             namespace: 'monad',
           ).map((chain) => '${chain.chainId}').toList(),
-          'methods': [
-            // NetworkUtils.defaultNetworkMethods['monad']!.toList(),
-          ],
-          'events': [
-            // NetworkUtils.defaultNetworkEvents['monad']!.toList()
-          ]
+          'methods': [],
+          'events': [],
         }),
       },
     );
@@ -96,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (!isFirstLaunch) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen(loginContext: context)),
       );
     }
   }
@@ -126,6 +141,62 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AppKitModalNetworkSelectButton(appKit: _appKitModal),
+
+                // AppKitModalNetworkSelectButton(
+                //   appKit: _appKitModal,
+                //   context: innerContext,
+                  // custom: Container(
+                  //   width: 200,
+                  //   height: 50,
+                  //   decoration: BoxDecoration(
+                  //     color: Color(0xFF8fb9ad),
+                  //     borderRadius: BorderRadius.circular(10),
+                  //   ),
+                //     child: Center(
+                //       child: Text(
+                //         'Select Network',
+                //         style: TextStyle(fontSize: 16, color: Colors.black),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // if (_appKitModal.isConnected)
+                //   Padding(
+                //     padding: const EdgeInsets.only(top: 20.0),
+                //     child: ElevatedButton(
+                //       onPressed: _onContinue,
+                //       style: ElevatedButton.styleFrom(
+                //         backgroundColor: Color(0xFF8fb9ad),
+                //         minimumSize: Size(200, 50),
+                //         shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(10),
+                //         ),
+                //       ),
+                //       child: Text(
+                //         'Continue',
+                //         style: TextStyle(fontSize: 18, color: Colors.white),
+                //       ),
+                //     ),
+                //   ),
+                Icon(
+                  Icons.health_and_safety, // Medical services icon
+                  size: 100, // Adjust size as needed
+                  color: Color(0xFF8fb9ad),
+                ),
+                SizedBox(height: 25),
+                Text(
+                  'Log in!',
+                  style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: Color(0xFF8fb9ad)),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20), // Space between the two texts
+                Text(
+                  '¡Ingresa con tu mejor cuenta!',
+                  style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 40),
+                // AppKitModalNetworkSelectButton(appKit: _appKitModal),
                 ElevatedButton(
                   onPressed: _onConnectTap,
                   style: ElevatedButton.styleFrom(
@@ -136,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   child: Text(
-                    _appKitModal.isConnected ? 'Disconnect' : 'Connect to Wallet',
+                    _appKitModal.isConnected ? 'Disconnect' : 'Ingresa!',
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
@@ -154,7 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: Text(
                         'Continue',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
+                        style: TextStyle(fontSize: 20, color: Colors.black),
                       ),
                     ),
                   ),

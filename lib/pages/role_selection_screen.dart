@@ -25,7 +25,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
     } else {
       // Skip to HomeScreen if not first launch
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen(loginContext: context)),
       );
     }
   }
@@ -34,7 +34,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userRole', role); // Save the selected role
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => HomeScreen()),
+      MaterialPageRoute(builder: (context) => HomeScreen(loginContext: context)),
     );
   }
 

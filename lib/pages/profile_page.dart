@@ -5,7 +5,9 @@ import '../models/appkit_global.dart';
 
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final ReownAppKitModal appKitModal;
+  final BuildContext context;
+  const ProfilePage({required this.appKitModal, required this.context, super.key});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -38,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start, // Align content to the start (left)
           children: [
-            Center( // Center the entire section horizontally
+            Center(
               child: Column(
                 children: [
                   Icon(
@@ -51,37 +53,54 @@ class _ProfilePageState extends State<ProfilePage> {
                     'User Name',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
+                  // Conditionally display ranking if role is Care Provider
+                  if (userRole == 'Care Provider')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(5, (index) {
+                          return Icon(
+                            index < 4.5 ? Icons.star : Icons.star_border, // 4.5 stars example
+                            color: Colors.amber,
+                            size: 20,
+                          );
+                        }),
+                      ),
+                    ),
                 ],
               ),
             ),
             SizedBox(height: 20), // Space between sections
-            if (AppKitGlobal.appKitModal != null) // Check if initialized
-              AppKitModalNetworkSelectButton(
-                appKit: AppKitGlobal.appKitModal!,
-                context: context,
-                custom: Container(
-                  width: 200,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Color(0xFF8fb9ad),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
+
+            Builder(
+              builder: (innerContext) {
+                if (AppKitGlobal.appKitModal == null) {
+                  // Optional: Trigger a refresh or wait for initialization
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (mounted && AppKitGlobal.appKitModal == null) {
+                      setState(() {}); // Retry build after a frame
+                    }
+                  });
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
                     child: Text(
-                      'Select Network',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      'Network selector not available yet. Please log in first.',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
+                  );
+                }
+                return Column(children: [
+                  AppKitModalNetworkSelectButton(
+                    appKit: AppKitGlobal.appKitModal!,
+                    context: innerContext,
                   ),
-                ),
-              )
-            else
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Text(
-                  'Network selector not available yet.',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ),
+                  AppKitModalAddressButton(appKitModal: AppKitGlobal.appKitModal!),
+                  AppKitModalBalanceButton(appKitModal: AppKitGlobal.appKitModal!),
+                ]);
+              },
+            ),
+
             SizedBox(height: 20),
             Text(
               'Role: $userRole',

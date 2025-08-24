@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 
 
 class LikesPage extends StatelessWidget {
-  const LikesPage({super.key});
+  final ReownAppKitModal appKitModal;
+  final BuildContext context;
+
+  const LikesPage({required this.appKitModal, required this.context, super.key});
 
   @override
   Widget build(BuildContext context) {
